@@ -19,7 +19,7 @@ Read the root `AGENTS.md` for the current wording of house rules 1 to 3 before j
 
 Only files under `src/games/` are in scope. `src/carnival/` is where the theme and the scores module are defined, so it holds the raw colours, font strings and storage calls that games must not, and `src/midway/palette.ts` has its own scenery colours built on the theme. Do not report code outside `src/games/`.
 
-For a new or changed `game.ts`, find its default export and the `id` it carries, and compare that `id` with the folder name.
+For a new or changed `game.ts`, find its default export and the `id` it carries, and compare that `id` with the folder name. Check that the default export actually matches `CarnivalGame`: it is annotated as `CarnivalGame` or built with `satisfies CarnivalGame`, and its `start` returns a cleanup function. An unannotated object passes the type-check and the tests even when `start` returns nothing or something else, and the router then calls that value as the cleanup when the player leaves the booth.
 
 Trace every place the game's score is stored or shown back to `recordScore`, `bestScore` or `topScores` from `src/carnival`. Follow the round's end through the game's state functions and `start` to count how many times `recordScore` runs for one round, including when the player restarts or the cleanup function from `start` runs mid-round.
 
@@ -33,7 +33,7 @@ Do not report:
 
 - Values derived from the theme, such as `theme.colors.accent`, a colour or size computed from a `theme` value, or a font built with `canvasFont`.
 - Test data in `game.test.ts`, including literal colours, ids or scores used to set up or assert state.
-- Anything lint, the type-checker or the tests already enforce, which `npm run check` runs in CI. A default export that is not a `CarnivalGame` fails the type-check, and `src/games/index.test.ts` fails when a folder's game is missing from the registry.
+- Anything lint, the type-checker or the tests already enforce, which `npm run check` runs in CI. A `game.ts` with no default export, or whose game's `id` differs from the folder name, throws in `src/games/index.ts` and fails `src/games/index.test.ts`. A default export with the wrong shape is not one of these: `import.meta.glob<CarnivalGame | undefined>` in `src/games/index.ts` only asserts the type, so the type-checker never compares the export with `CarnivalGame`.
 - House rules 4 to 7, which other lenses or people review.
 
 ## Reporting
