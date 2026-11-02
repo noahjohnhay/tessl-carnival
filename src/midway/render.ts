@@ -1708,6 +1708,45 @@ export function drawCloud(ctx: Ctx, x: number, y: number, size: number) {
   ctx.fill();
 }
 
+/** A full moon with a soft glow, hanging over the midway. */
+export function drawMoon(ctx: Ctx, x: number, y: number, r: number) {
+  ctx.fillStyle = palette.moonGlow;
+  for (const k of [2.4, 1.8, 1.35]) {
+    ctx.beginPath();
+    ctx.arc(x, y, r * k, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.fillStyle = palette.moon;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = palette.moonShade;
+  for (const [dx, dy, s] of [
+    [-0.3, -0.2, 0.22],
+    [0.25, 0.15, 0.16],
+    [-0.05, 0.4, 0.12],
+  ]) {
+    ctx.beginPath();
+    ctx.arc(x + dx * r, y + dy * r, s * r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+/** A little bat, wings flapping with `t`. */
+export function drawBat(ctx: Ctx, x: number, y: number, size: number, t: number) {
+  const flap = Math.sin(t * 12) * 4 * size;
+  ctx.fillStyle = palette.bat;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.quadraticCurveTo(x - 5 * size, y - 3 * size - flap, x - 11 * size, y - flap);
+  ctx.quadraticCurveTo(x - 6 * size, y + 1 * size, x - 3 * size, y + 2 * size);
+  ctx.lineTo(x, y + 3 * size);
+  ctx.lineTo(x + 3 * size, y + 2 * size);
+  ctx.quadraticCurveTo(x + 6 * size, y + 1 * size, x + 11 * size, y - flap);
+  ctx.quadraticCurveTo(x + 5 * size, y - 3 * size - flap, x, y);
+  ctx.fill();
+}
+
 export interface Floater {
   x: number;
   y: number;

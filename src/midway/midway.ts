@@ -6,10 +6,12 @@ import {
   drawArch,
   drawBooth,
   drawBunting,
+  drawBat,
   drawCloud,
   drawFloaters,
   drawFrontHedge,
   drawField,
+  drawMoon,
   drawGroundLayer,
   drawProp,
   drawWalker,
@@ -271,7 +273,14 @@ export function startMidway(canvas: HTMLCanvasElement, options: MidwayOptions): 
     ctx.fillRect(0, 0, canvas.clientWidth, Math.max(0, horizon + 2));
 
     ctx.setTransform(dpr * zoom, 0, 0, dpr * zoom, 0, 0);
+    drawMoon(ctx, view.w * 0.78 - camera.x * 0.05, HORIZON - camera.y - 150, 26);
     const span = view.w + 200;
+    for (let i = 0; i < 4; i++) {
+      const drift = calm ? 0 : t * (18 + i * 5);
+      const x = ((((i * 0.27 * span + drift - camera.x * 0.2) % span) + span) % span) - 100;
+      const bob = calm ? 0 : Math.sin(t * 2 + i * 1.7) * 8;
+      drawBat(ctx, x, HORIZON - camera.y - 110 - i * 22 + bob, 0.8 + (i % 2) * 0.3, t + i);
+    }
     for (const cloud of clouds) {
       const x =
         ((((cloud.x * span - camera.x * 0.3 + (calm ? 0 : t * cloud.speed)) % span) + span) %
