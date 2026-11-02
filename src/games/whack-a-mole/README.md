@@ -4,7 +4,8 @@ Whack the moles as they pop up from the holes, before they duck back down.
 
 ## How to play
 
-- Moles pop up from a grid of nine holes, one at a time, and drop back down after a moment.
+- Moles pop up in random empty holes in a grid of nine, and drop back down after a moment.
+  More than one mole can be up at a time.
 - Click a mole while it's up to whack it.
 - The round lasts 30 seconds. As the clock runs down, moles pop up more often and
   stay up for less time: from one every 1 second, up for 1.2 seconds, at the start,
